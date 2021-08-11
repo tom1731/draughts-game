@@ -4,6 +4,8 @@ from game import Game
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('draughts game')
 
+running = True
+
 
 class Menu:
 
@@ -17,7 +19,7 @@ class Menu:
 
     def run(self):
 
-        running = True
+        global running
 
         while running:
             for event in pygame.event.get():
@@ -31,6 +33,8 @@ class Menu:
                         print(event.pos)
                         for obj in self.buttons:
                             obj.activate(event.pos)
+
+            screen.fill("gray")
 
             for button in self.buttons:
                 button.display()
@@ -58,7 +62,11 @@ class Button:
         if self.rect.collidepoint(pos):
             print('touching ' + self.action + ' button!')
             if self.action == 'quit':
-                pygame.quit()
+                global running
+                running = False
+            if self.action == 'local pvp':
+                game = Game()
+                game.run()
 
     def display(self):
         screen.blit(self.sprite, self.pos)
